@@ -32,10 +32,10 @@ class JbuilderTemplate < Jbuilder
   #   end
   def cache!(key=nil, options={})
     if @context.controller.perform_caching
-      value = ::Rails.cache.fetch(_cache_key(key, options), options) do
+      name_options = options.slice(:skip_digest, :virtual_path)
+      value = ::Rails.cache.fetch(_cache_key(key, name_options), options) do
         _scope { yield self }
       end
-
       merge! value
     else
       yield
